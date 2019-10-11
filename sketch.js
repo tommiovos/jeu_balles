@@ -34,7 +34,7 @@ var obstacleSpeed = [];
 var speedUp = 0;
 var lastSec = 0;
 var levels;
-var obstacleSize = 70;
+var obstacleSize = [];
 var gameWidth = 640 * 2;
 var gameHeight = 480 * 2;
 var gameOn = false;
@@ -47,6 +47,7 @@ var button3;
 var power1 = false;
 var power2 = false;
 var power3 = false;
+var randomArr = 0;
 
 function preload() {
   imgP1 = loadImage("assets/george.png");
@@ -150,6 +151,7 @@ function addObstacle() {
   }
 
   obstacleSpeed.push(Math.trunc(random(1, 3)))
+  obstacleSize.push(Math.trunc(random(10, 60)))
   posObstacleX.push(randX);
   posObstacleY.push(randY);
   changingX.push(random([0, 1]));
@@ -179,7 +181,7 @@ function LanceObsctacle(i) {
       changingX[i] = 0;
     }
     fill(color_R[i], color_V[i], color_B[i]);
-    ellipse(posObstacleX[i], posObstacleY[i], obstacleSize, obstacleSize);
+    ellipse(posObstacleX[i], posObstacleY[i], obstacleSize[i], obstacleSize[i]);
   }
 
 
@@ -200,7 +202,7 @@ function LanceObsctacle(i) {
       changingY[i] = 0;
     }
     fill(color_R[i], color_V[i], color_B[i]);
-    ellipse(posObstacleX[i], posObstacleY[i], obstacleSize, obstacleSize);
+    ellipse(posObstacleX[i], posObstacleY[i], obstacleSize[i], obstacleSize[i]);
 
   }
 
@@ -213,7 +215,7 @@ function testDistance(i) {
   distanceY = Math.pow(positionY - posObstacleY[i], 2);
   distanceTotale = Math.sqrt(distanceX + distanceY);
 
-  if (distanceTotale < (tailleCercle / 2) + (obstacleSize / 2)) {
+  if (distanceTotale < (tailleCercle / 2) + (obstacleSize[i] / 2)) {
     siTouche = 1;
     estEnVie = false;
   } else {
@@ -239,6 +241,7 @@ function endGame() {
   color_B = [];
   speedUp = 0;
   lastSec = 0;
+  randomArr = 0;
   for (let i = 0; i < 50; i++) {
     color_R[i] = random(0, 255)
     color_V[i] = random(0, 255)
@@ -279,7 +282,7 @@ function siHorsDeLEcran() {
     positionX = gameWidth - 40;
     stroke(173, 36, 36);
     strokeWeight(10);
-    line(636, 0, 636, gameHeight);
+    line(gameWidth - 4, 0, gameWidth - 4, gameHeight);
   }
 
   if (positionX < 40) {
@@ -293,7 +296,7 @@ function siHorsDeLEcran() {
     positionY = gameHeight - 40;
     stroke(173, 36, 36);
     strokeWeight(10);
-    line(0, 476, gameWidth, 476);
+    line(0, gameHeight - 4, gameWidth, gameHeight - 4);
   }
 
   if (positionY < 40) {
@@ -366,7 +369,7 @@ function selectPlayer() {
 
 function player1() {
   power1 = true;
-  console.log("player1")
+  console.log(power1)
   gameOn = true;
   button1.hide();
   button2.hide();
@@ -393,10 +396,16 @@ function player3() {
 
 
 function powers() {
-  if (keyIsDown == CONTROL) {
+  if (keyIsDown(CONTROL)) {
 
     if(power1 == true) {
-      random([0,posObstacleX.length])
+      console.log(posObstacleX);
+      for (i=0; i<5; i++) {
+        randomArr = Math.trunc(random(0,posObstacleX.length));
+        posObstacleX.splice(randomArr,1);
+        posObstacleX.splice(randomArr,1);
+        console.log(posObstacleX);
+      }
     }
 
     else if (power2 == true) {
