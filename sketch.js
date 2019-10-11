@@ -35,6 +35,7 @@ var color_B = [];
 var obstacleSpeed = [];
 var speedUp = 0;
 var lastSec = 0;
+var lastSec3 = 0;
 var levels;
 var obstacleSize = [];
 var gameWidth = 640 * 2;
@@ -47,18 +48,26 @@ let imgP4;
 var button2;
 var button1;
 var button3;
+var button2_2;
+var button1_2;
+var button3_2;
 var power1 = false;
 var power2 = false;
 var power3 = false;
+var power1_2 = false;
+var power2_2 = false;
+var power3_2 = false;
 var randomArr = 0;
 var lastSec2 = 0;
 var levels2;
+var levels3;
 var superSize;
 var testSuperSize;
 var player_img;
 var speedPower = 0;
 var countPower3 = 0;
 var testPower1 = false;
+var testPower1_2 = false;
 var player_img2;
 var joueurs = [];
 var distanceX_2;
@@ -69,6 +78,17 @@ var slidPlayers;
 var whichPlayer;
 var buttonConfirm;
 var playerNumber = 0;
+var select2 = true;
+var powerTest3;
+
+var selectedPower1 = false;
+var selectedPower1_2 = false;
+
+var selectedPower2 = false;
+var selectedPower2_2 = false;
+
+var selectedPower3 = false;
+var selectedPower3_2 = false;
 
 function preload() {
   imgP1 = loadImage("assets/george.png");
@@ -84,6 +104,11 @@ function setup() {
   background(50)
   superSize = 0;
 
+  button1 = createButton('Choose this ball');
+  button1.position(150,620);
+  button1.size(200,90);
+  button1.mouseClicked(player1);
+  button1.hide();
 
   button2 = createButton('Choose this ball');
   button2.position(550,620);
@@ -97,11 +122,26 @@ function setup() {
   button3.mouseClicked(player3);
   button3.hide();
 
-  button1 = createButton('Choose this ball');
-  button1.position(150,620);
-  button1.size(200,90);
-  button1.mouseClicked(player1);
-  button1.hide();
+  // ---------
+
+  button1_2 = createButton('Choose this ball');
+  button1_2.position(150,620);
+  button1_2.size(200,90);
+  button1_2.mouseClicked(player1_2);
+  button1_2.hide();
+
+  button2_2 = createButton('Choose this ball');
+  button2_2.position(550,620);
+  button2_2.size(200,90);
+  button2_2.mouseClicked(player2_2);
+  button2_2.hide();
+
+  button3_2 = createButton('Choose this ball');
+  button3_2.position(950,620);
+  button3_2.size(200,90);
+  button3_2.mouseClicked(player3_2);
+  button3_2.hide();
+
 
   buttonConfirm = createButton('Confirm');
   buttonConfirm.position(gameWidth / 2 - 80, 600)
@@ -154,6 +194,7 @@ function draw() {
       }
       changeFill();
       powers();
+      powers_p2();
     } else {
       endGame();
       resetGame = true;
@@ -264,10 +305,6 @@ function testDistance(i) {
   distanceY = Math.pow(positionY - posObstacleY[i], 2);
   distanceTotale = Math.sqrt(distanceX + distanceY);
 
-  distanceX_2 = Math.pow(positionX2 - posObstacleX[i], 2);
-  distanceY_2 = Math.pow(positionY2 - posObstacleY[i], 2);
-  distanceTotale_2 = Math.sqrt(distanceX_2 + distanceY_2);
-
   if (distanceTotale < (tailleCercle / 2) + (obstacleSize[i] / 2)) {
     siTouche = 1;
     estEnVie = false;
@@ -275,12 +312,20 @@ function testDistance(i) {
     siTouche = 0;
   }
 
-  if (distanceTotale_2 < (tailleCercle / 2) + (obstacleSize[i] / 2)) {
-    siTouche = 1;
-    estEnVie = false;
-  } else {
-    siTouche = 0;
+  if (playerNumber == 2) {
+    distanceX_2 = Math.pow(positionX2 - posObstacleX[i], 2);
+    distanceY_2 = Math.pow(positionY2 - posObstacleY[i], 2);
+    distanceTotale_2 = Math.sqrt(distanceX_2 + distanceY_2);
+  
+    if (distanceTotale_2 < (tailleCercle / 2) + (obstacleSize[i] / 2)) {
+      siTouche = 1;
+      estEnVie = false;
+    } else {
+      siTouche = 0;
+    }
+  
   }
+
 
 }
 
@@ -300,9 +345,27 @@ function endGame() {
   color_V = [];
   color_B = [];
   speedUp = 0;
-  lastSec = 0;
   randomArr = 0;
-  power1 = true;
+
+  if(selectedPower1 == true) {
+    power1 = true;
+  }
+  if (selectedPower1_2 == true) {
+    power1_2 = true;
+  }
+  if (selectedPower2 == true) {
+    power2 = true;
+  }
+  if (selectedPower2_2 == true) {
+    power2_2 = true;
+  }
+  if (selectedPower3 == true) {
+    power3 = true;
+  }
+  if (selectedPower3_2 == true) {
+    power3_2 = true;
+  }
+
   levels = 0;
   levels2 = 0;
   lastSec = 0;
@@ -335,22 +398,22 @@ function drawEllipse() {
   // ------------
 
   if (keyIsDown(81)) {
-    positionX2 = positionX2 - (5 + speedPower);
+    positionX2 = positionX2 - (5 + speedPower_2);
     console.log("Pos X2 :"+ positionX2);
   }
 
   if (keyIsDown(68)) {
-    positionX2 = positionX2 + (5 + speedPower);
+    positionX2 = positionX2 + (5 + speedPower_2);
     console.log("Pos X2 :"+positionX2);
   }
 
   if (keyIsDown(90)) {
-    positionY2 -= (5 + speedPower);
+    positionY2 -= (5 + speedPower_2);
     console.log("Pos Y2 :"+positionY2);
   }
 
   if (keyIsDown(83)) {
-    positionY2 += (5 + speedPower);
+    positionY2 += (5 + speedPower_2);
     console.log("Pos Y2 :"+positionY2);
   }
 
@@ -451,6 +514,7 @@ function changeFill() {
 function nextLevel() {
   levels = seconde - lastSec;
   levels2 = seconde - lastSec2;
+  levels3 = seconde - lastSec3;
   if (levels > 4) {
     lastSec = seconde;
     speedUp = speedUp + 1;
@@ -458,6 +522,7 @@ function nextLevel() {
   }
   if (levels2 > 14) {
     power1 = true;
+    power1_2 = true;
     lastSec2 = seconde;
   }
 }
@@ -478,9 +543,12 @@ function selectNumberPlayer() {
 }
 
 function selectPlayer() {
-  button1.show();
-  button2.show();
-  button3.show();
+  if(select2 == true) {
+    button1.show();
+    button2.show();
+    button3.show();
+  }
+
   background(50);
   rect(gameWidth / 16, gameHeight / 16, gameWidth / 4, (gameHeight - gameHeight / 8) , 20);
   rect((gameWidth / 16) * 6, gameHeight / 16, gameWidth / 4, (gameHeight - gameHeight / 8) , 20);
@@ -492,32 +560,100 @@ function selectPlayer() {
 
 function player1() {
   power1 = true;
+  selectedPower1 = true;
   console.log(power1)
-  gameOn = true;
+  player_img = loadImage("assets/george_p.png");
+  // player_img2 = loadImage("assets/george_p.png");
+  testPower1 = true;
+  if(playerNumber == 1) {gameOn = true;}
+  else {
+    button1_2.show();
+    button2_2.show();
+    button3_2.show();
+    }
   button1.hide();
   button2.hide();
   button3.hide();
-  player_img = loadImage("assets/george_p.png");
-  player_img2 = loadImage("assets/george_p.png");
-  testPower1 = true;
+  select2 = false;
 }
 
 function player2() {
   power2 = true;
   console.log("player2")
-  gameOn = true;
+
+  if(playerNumber == 1) {
+    gameOn = true;
+    selectedPower2;
+  }
+  else {
+    button1_2.show();
+    button2_2.show();
+    button3_2.show();
+    }
   button1.hide();
   button2.hide();
   button3.hide();
+  select2 = false;
+  player_img = loadImage("assets/mirna_p.png");
 }
 
 function player3() {
   power3 = true;
+  selectedPower3 = true;
   console.log("player3")
-  gameOn = true;
+
+  if(playerNumber == 1) {
+    gameOn = true;
+  }
+
+  else {
+    button1_2.show();
+    button2_2.show();
+    button3_2.show();
+  }
+
   button1.hide();
   button2.hide();
   button3.hide();
+  select2 = false;
+  player_img = loadImage("assets/blip_p.png");
+}
+
+
+// ---------------------------------------
+
+function player1_2() {
+  power1_2 = true;
+  selectedPower1_2 = true;
+  console.log(power1)
+  gameOn = true;
+  button1_2.hide();
+  button2_2.hide();
+  button3_2.hide();
+  player_img2 = loadImage("assets/george_p.png");
+  testPower1_2 = true;
+}
+
+function player2_2() {
+  power2_2 = true;
+  selectedPower2_2 = true;
+  console.log("player2")
+  gameOn = true;
+  button1_2.hide();
+  button2_2.hide();
+  button3_2.hide();
+  player_img2 = loadImage("assets/mirna_p.png");
+}
+
+function player3_2() {
+  power3_2 = true;
+  selectedPower3_2 = true;
+  console.log("player3")
+  gameOn = true;
+  button1_2.hide();
+  button2_2.hide();
+  button3_2.hide();
+  player_img2 = loadImage("assets/blip_p.png");
 }
 
 
@@ -548,11 +684,27 @@ function powers() {
     }
 
     else if (power3 == true) {
-      countPower3 = seconde;
-      if ((countPower3 - seconde) > 10) {
-        console.log("power3");
-        countPower3 = seconde;
+        for(i=0; i < nbrObstacles; i++) {
+            if(obstacleSize[i] > 20 && obstacleSize[i] <= 30 ) {
+              obstacleSize[i] = obstacleSize[i] - 8;
+            }
+            else if (obstacleSize[i] > 30 && obstacleSize[i] <= 40) {
+              obstacleSize[i] = obstacleSize[i] - 15;
+            }
+            else if (obstacleSize[i] > 40 && obstacleSize[i] <=50) {
+              obstacleSize[i] = obstacleSize[i] - 25;
+            }
+            else if (obstacleSize[i] > 50 && obstacleSize[i] <= 60) {
+              obstacleSize[i] = obstacleSize[i] -35;
+            }
+            else if (obstacleSize[i] > 60 && obstacleSize[i] <= 100) {
+              obstacleSize[i] = obstacleSize[i] -45;
+            }
+            else if (obstacleSize[i] > 100) {
+              obstacleSize[i] = obstacleSize[i] - 70;
+            }
       }
+      power3 = false;
 
     }
         
@@ -563,6 +715,67 @@ function powers() {
   }
   else {
     speedPower = 0;
+  }
+}
+
+function powers_p2() {
+  if (keyIsDown(65)) {
+
+    if(power1_2 == true) {
+      console.log(posObstacleX);
+      for (i=0; i<5; i++) {
+        randomArr = Math.trunc(random(0,posObstacleX.length));
+        posObstacleX.splice(randomArr,1);
+        posObstacleY.splice(randomArr,1);
+        nbrObstacles = posObstacleY.length;
+        // change color wite same random
+        color_R.splice(randomArr,1);
+        color_V.splice(randomArr,1);
+        color_B.splice(randomArr,1);
+        console.log(posObstacleX);
+
+        obstacleSpeed.splice(randomArr,1);
+        obstacleSize.splice(randomArr,1);
+        changingX.splice(randomArr,1);
+        changingY.splice(randomArr,1);
+        h_v.splice(randomArr,1);
+      
+      }
+      power1_2 = false;
+    }
+
+    else if (power3_2 == true) {
+      for(i=0; i < nbrObstacles; i++) {
+          if(obstacleSize[i] > 20 && obstacleSize[i] <= 30 ) {
+            obstacleSize[i] = obstacleSize[i] - 8;
+          }
+          else if (obstacleSize[i] > 30 && obstacleSize[i] <= 40) {
+            obstacleSize[i] = obstacleSize[i] - 15;
+          }
+          else if (obstacleSize[i] > 40 && obstacleSize[i] <=50) {
+            obstacleSize[i] = obstacleSize[i] - 25;
+          }
+          else if (obstacleSize[i] > 50 && obstacleSize[i] <= 60) {
+            obstacleSize[i] = obstacleSize[i] -35;
+          }
+          else if (obstacleSize[i] > 60 && obstacleSize[i] <= 100) {
+            obstacleSize[i] = obstacleSize[i] -45;
+          }
+          else if (obstacleSize[i] > 100) {
+            obstacleSize[i] = obstacleSize[i] - 70;
+          }
+    }
+    power3_2 = false;
+
+  }
+        
+  }
+
+  if (power2_2 == true && keyIsDown(65)) {
+      speedPower_2 = 4;
+  }
+  else {
+    speedPower_2 = 0;
   }
 }
 
