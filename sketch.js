@@ -403,9 +403,11 @@ function powers() {
       for (i=0; i<5; i++) {
         randomArr = Math.trunc(random(0,posObstacleX.length));
         posObstacleX.splice(randomArr,1);
-        posObstacleX.splice(randomArr,1);
+        posObstacleY.splice(randomArr,1);
+        nbrObstacles = posObstacleY.length; 
         console.log(posObstacleX);
       }
+      power1 = false;
     }
 
     else if (power2 == true) {
