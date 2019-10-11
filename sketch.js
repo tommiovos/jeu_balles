@@ -49,7 +49,7 @@ var power2 = false;
 var power3 = false;
 
 function preload() {
-  imgP1 = loadImage("assets/George.png");
+  imgP1 = loadImage("assets/george.png");
   imgP2 = loadImage("assets/mirna.png");
   imgP3 = loadImage("assets/blip.png");
 }
