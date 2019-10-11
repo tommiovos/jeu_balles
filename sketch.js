@@ -48,6 +48,10 @@ var power1 = false;
 var power2 = false;
 var power3 = false;
 var randomArr = 0;
+var lastSec2 = 0;
+var levels2;
+var superSize;
+var testSuperSize;
 
 function preload() {
   imgP1 = loadImage("assets/george.png");
@@ -58,6 +62,7 @@ function preload() {
 function setup() {
   createCanvas(gameWidth, gameHeight);
   background(50)
+  superSize = 0;
 
 
   button2 = createButton('Choose this ball');
@@ -131,6 +136,14 @@ function draw() {
 
 function addObstacle() {
   randHV = random([0, 1]);
+  testSuperSize = Math.trunc(random(0,30))
+  console.log(testSuperSize);
+  if (testSuperSize == 3) {
+    superSize = random(2,4);
+  }
+  else {
+    superSize = 1;
+  }
 
 
 
@@ -151,7 +164,7 @@ function addObstacle() {
   }
 
   obstacleSpeed.push(Math.trunc(random(1, 3)))
-  obstacleSize.push(Math.trunc(random(10, 60)))
+  obstacleSize.push(Math.trunc(random(20, 60)* superSize))
   posObstacleX.push(randX);
   posObstacleY.push(randY);
   changingX.push(random([0, 1]));
@@ -242,6 +255,11 @@ function endGame() {
   speedUp = 0;
   lastSec = 0;
   randomArr = 0;
+  power1 = true;
+  levels = 0;
+  levels2 = 0;
+  lastSec = 0;
+  lastSec2 = 0;
   for (let i = 0; i < 50; i++) {
     color_R[i] = random(0, 255)
     color_V[i] = random(0, 255)
@@ -350,10 +368,15 @@ function changeFill() {
 
 function nextLevel() {
   levels = seconde - lastSec;
+  levels2 = seconde - lastSec2;
   if (levels > 4) {
     lastSec = seconde;
     speedUp = speedUp + 1;
     console.log("salut 1");
+  }
+  if (levels2 > 14) {
+    power1 = true;
+    lastSec2 = seconde;
   }
 }
 
@@ -404,8 +427,21 @@ function powers() {
         randomArr = Math.trunc(random(0,posObstacleX.length));
         posObstacleX.splice(randomArr,1);
         posObstacleY.splice(randomArr,1);
-        nbrObstacles = posObstacleY.length; 
+        nbrObstacles = posObstacleY.length;
+        // change color wite same random
+        color_R.splice(randomArr,1);
+        color_V.splice(randomArr,1);
+        color_B.splice(randomArr,1);
         console.log(posObstacleX);
+
+
+
+        obstacleSpeed.splice(randomArr,1);
+        obstacleSize.splice(randomArr,1);
+        changingX.splice(randomArr,1);
+        changingY.splice(randomArr,1);
+        h_v.splice(randomArr,1);
+      
       }
       power1 = false;
     }
