@@ -64,6 +64,11 @@ var joueurs = [];
 var distanceX_2;
 var distanceY_2;
 var distanceTotale_2;
+var selectNbPlayer = true;
+var slidPlayers;
+var whichPlayer;
+var buttonConfirm;
+var playerNumber = 0;
 
 function preload() {
   imgP1 = loadImage("assets/george.png");
@@ -84,17 +89,28 @@ function setup() {
   button2.position(550,620);
   button2.size(200,90);
   button2.mouseClicked(player2);
+  button2.hide();
 
   button3 = createButton('Choose this ball');
   button3.position(950,620);
   button3.size(200,90);
   button3.mouseClicked(player3);
+  button3.hide();
 
   button1 = createButton('Choose this ball');
   button1.position(150,620);
   button1.size(200,90);
   button1.mouseClicked(player1);
+  button1.hide();
 
+  buttonConfirm = createButton('Confirm');
+  buttonConfirm.position(gameWidth / 2 - 80, 600)
+  buttonConfirm.mouseClicked(launchPlayerSelect);
+
+  slidPlayers = createSlider(1,2,1);
+  slidPlayers.position(gameWidth / 2 - 200,500);
+  slidPlayers.style('width', '400px');
+  slidPlayers.class('slider');
 
   posObstacleX = [];
   posObstacleY = [];
@@ -144,9 +160,12 @@ function draw() {
     }
 
   }
-  else {
+  else if (selectNbPlayer == false) {
     selectPlayer();
 
+  }
+  else {
+    selectNumberPlayer();
   }
 
 }
@@ -414,10 +433,14 @@ function changeFill() {
   image(player_img, positionX, positionY, tailleCercle, tailleCercle);
   pop();
 
-  push();
-  translate(-tailleCercle / 2, -tailleCercle / 2);
-  image(player_img2, positionX2, positionY2, tailleCercle, tailleCercle);
-  pop();
+
+  if (playerNumber == 2) {
+    push();
+    translate(-tailleCercle / 2, -tailleCercle / 2);
+    image(player_img2, positionX2, positionY2, tailleCercle, tailleCercle);
+    pop();
+
+  }
   if (siTouche == 0) {
     fill(248, 137, 21);
   } else {
@@ -439,7 +462,25 @@ function nextLevel() {
   }
 }
 
+
+function selectNumberPlayer() {
+
+  if (slidPlayers.value() == 1) {
+    whichPlayer = "One player"
+  }
+  else {
+    whichPlayer = "Two players"
+  }
+
+  background(50);
+  textSize(60);
+  text(whichPlayer, 485, 420);
+}
+
 function selectPlayer() {
+  button1.show();
+  button2.show();
+  button3.show();
   background(50);
   rect(gameWidth / 16, gameHeight / 16, gameWidth / 4, (gameHeight - gameHeight / 8) , 20);
   rect((gameWidth / 16) * 6, gameHeight / 16, gameWidth / 4, (gameHeight - gameHeight / 8) , 20);
@@ -496,8 +537,6 @@ function powers() {
         color_B.splice(randomArr,1);
         console.log(posObstacleX);
 
-
-
         obstacleSpeed.splice(randomArr,1);
         obstacleSize.splice(randomArr,1);
         changingX.splice(randomArr,1);
@@ -525,4 +564,12 @@ function powers() {
   else {
     speedPower = 0;
   }
+}
+
+function launchPlayerSelect() {
+  selectNbPlayer = false;
+  buttonConfirm.hide();
+  slidPlayers.hide();
+  playerNumber = slidPlayers.value();
+  console.log(playerNumber);
 }
