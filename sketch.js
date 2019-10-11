@@ -1,6 +1,8 @@
 var tailleCercle = 80;
 var positionX;
 var positionY;
+var positionX2;
+var positionY2;
 var posObstacleX;
 var posObstacleY;
 var changingX = [];
@@ -41,6 +43,7 @@ var gameOn = false;
 let imgP1;
 let imgP2;
 let imgP3;
+let imgP4;
 var button2;
 var button1;
 var button3;
@@ -52,11 +55,23 @@ var lastSec2 = 0;
 var levels2;
 var superSize;
 var testSuperSize;
+var player_img;
+var speedPower = 0;
+var countPower3 = 0;
+var testPower1 = false;
+var player_img2;
+var joueurs = [];
+var distanceX_2;
+var distanceY_2;
+var distanceTotale_2;
 
 function preload() {
   imgP1 = loadImage("assets/george.png");
   imgP2 = loadImage("assets/mirna.png");
   imgP3 = loadImage("assets/blip.png");
+  imgP4 = loadImage("assets/george_p.png");
+  player_img = loadImage("assets/mirna.png");
+  player_img2 = loadImage("assets/mirna.png");
 }
 
 function setup() {
@@ -86,6 +101,8 @@ function setup() {
   nbrObstacles = 1;
   positionX = random(60, gameWidth - 100)
   positionY = random(50, gameHeight - 80)
+  positionX2 = random(60, gameWidth - 100)
+  positionY2 = random(50, gameHeight - 80)
 
   for (let i = 0; i < 50; i++) {
     color_R[i] = random(0, 255)
@@ -228,7 +245,18 @@ function testDistance(i) {
   distanceY = Math.pow(positionY - posObstacleY[i], 2);
   distanceTotale = Math.sqrt(distanceX + distanceY);
 
+  distanceX_2 = Math.pow(positionX2 - posObstacleX[i], 2);
+  distanceY_2 = Math.pow(positionY2 - posObstacleY[i], 2);
+  distanceTotale_2 = Math.sqrt(distanceX_2 + distanceY_2);
+
   if (distanceTotale < (tailleCercle / 2) + (obstacleSize[i] / 2)) {
+    siTouche = 1;
+    estEnVie = false;
+  } else {
+    siTouche = 0;
+  }
+
+  if (distanceTotale_2 < (tailleCercle / 2) + (obstacleSize[i] / 2)) {
     siTouche = 1;
     estEnVie = false;
   } else {
@@ -270,19 +298,41 @@ function endGame() {
 function drawEllipse() {
 
   if (keyIsDown(LEFT_ARROW)) {
-    positionX = positionX - 5;
+    positionX = positionX - (5 + speedPower);
   }
 
   if (keyIsDown(RIGHT_ARROW)) {
-    positionX += 5;
+    positionX += (5 + speedPower);
   }
 
   if (keyIsDown(UP_ARROW)) {
-    positionY -= 5;
+    positionY -= (5 + speedPower);
   }
 
   if (keyIsDown(DOWN_ARROW)) {
-    positionY += 5;
+    positionY += (5 + speedPower);
+  }
+
+  // ------------
+
+  if (keyIsDown(81)) {
+    positionX2 = positionX2 - (5 + speedPower);
+    console.log("Pos X2 :"+ positionX2);
+  }
+
+  if (keyIsDown(68)) {
+    positionX2 = positionX2 + (5 + speedPower);
+    console.log("Pos X2 :"+positionX2);
+  }
+
+  if (keyIsDown(90)) {
+    positionY2 -= (5 + speedPower);
+    console.log("Pos Y2 :"+positionY2);
+  }
+
+  if (keyIsDown(83)) {
+    positionY2 += (5 + speedPower);
+    console.log("Pos Y2 :"+positionY2);
   }
 
 
@@ -347,6 +397,8 @@ function mouseClicked() {
     estEnVie = true;
     positionX = random(60, gameHeight - 100)
     positionY = random(50, gameHeight - 80)
+    positionX2 = random(60, gameHeight - 100)
+    positionY2 = random(50, gameHeight - 80)
   }
 }
 
@@ -357,8 +409,15 @@ function changeFill() {
   } else {
     fill(173, 36, 36);
   }
+  push();
+  translate(-tailleCercle / 2, -tailleCercle / 2);
+  image(player_img, positionX, positionY, tailleCercle, tailleCercle);
+  pop();
 
-  ellipse(positionX, positionY, tailleCercle, tailleCercle);
+  push();
+  translate(-tailleCercle / 2, -tailleCercle / 2);
+  image(player_img2, positionX2, positionY2, tailleCercle, tailleCercle);
+  pop();
   if (siTouche == 0) {
     fill(248, 137, 21);
   } else {
@@ -397,6 +456,9 @@ function player1() {
   button1.hide();
   button2.hide();
   button3.hide();
+  player_img = loadImage("assets/george_p.png");
+  player_img2 = loadImage("assets/george_p.png");
+  testPower1 = true;
 }
 
 function player2() {
@@ -446,13 +508,21 @@ function powers() {
       power1 = false;
     }
 
-    else if (power2 == true) {
-
-    }
-
     else if (power3 == true) {
+      countPower3 = seconde;
+      if ((countPower3 - seconde) > 10) {
+        console.log("power3");
+        countPower3 = seconde;
+      }
 
     }
         
+  }
+
+  if (power2 == true && keyIsDown(CONTROL)) {
+      speedPower = 4;
+  }
+  else {
+    speedPower = 0;
   }
 }
